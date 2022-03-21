@@ -12,9 +12,11 @@
     background-color: #F6F6F6;
     height: 39px;
     padding: 10px;
+    
 }
 
 .sidebar_serachContainer{
+    
     display:flex;
     align-items: center;
     background-color: white;
@@ -33,7 +35,7 @@
 .sidebar_header{
 display: flex;
 justify-content: space-between;
-padding: 20px;
+padding: 25px;
 border-right: 1px solid lightgray;
 }
 
