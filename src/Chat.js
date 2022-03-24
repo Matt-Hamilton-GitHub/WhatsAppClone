@@ -1,4 +1,5 @@
-import { AttachFile, MoreVert, SearchOutlined } from '@mui/icons-material'
+import { AttachFile, InsertEmoticon, MoreVert, SearchOutlined } from '@mui/icons-material'
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { Avatar, IconButton } from '@mui/material'
 import React, { useState, useEffect} from 'react'
 import './Chat.css'
@@ -38,14 +39,22 @@ const Chat = () => {
 
         <div className='chat_body'>
             
-            <p className={`chat_message ${true && 'chat_reciever'}`}><span className='chat_name'>
+
+            <p className={`chat_message ${true && 'chat_reciever'}`}>
+                <span className='chat_name'>
                 Matt H</span>Hey Guys
                 <span className='chat_timestamp'>{`${new Date().getHours()}:${new Date().getMinutes()}pm`}</span>
             </p>
+
         </div>
 
         <div className='chat_footer'>
-                
+                <InsertEmoticon />
+                <form>
+                    <input type='text' placeholder='Type a message'/>
+                    <button>Send</button>
+                </form>
+                <KeyboardVoiceIcon />
         </div>
 
     </div>
