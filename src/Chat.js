@@ -9,6 +9,15 @@ const Chat = () => {
 
     
     const [isSeed, setSeed] = useState('')
+    const [userMessage, setUserMessage] = useState('')
+
+
+const sendMessage = (e) =>  {
+    e.preventDefault();
+    
+}
+
+console.log(userMessage);
 
     useEffect(()=>{
         
@@ -50,9 +59,16 @@ const Chat = () => {
 
         <div className='chat_footer'>
                 <InsertEmoticon />
-                <form>
-                    <input type='text' placeholder='Type a message'/>
-                    <button>Send</button>
+                <form >
+                    <input 
+                    name='userMessage'
+                    value={userMessage}
+                    onChange={(e) =>setUserMessage(e.target.value)}
+                    type='text' 
+                    placeholder='Type a message'/>
+                    <button 
+                    type='submit'
+                    onClick={(e) => sendMessage(e)}>Send</button>
                 </form>
                 <KeyboardVoiceIcon />
         </div>
