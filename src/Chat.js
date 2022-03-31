@@ -14,6 +14,8 @@ const Chat = () => {
 
 const sendMessage = (e) =>  {
     e.preventDefault();
+
+    setUserMessage('')
     
 }
 

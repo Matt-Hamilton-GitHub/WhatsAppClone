@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './SideBar.css'
 import SettingsIcon from '@mui/icons-material/Settings';
 import SidebarChat from './SidebarChat';
@@ -6,9 +6,41 @@ import { Chat, SearchOutlined } from '@mui/icons-material';
 import { MoreVert } from '@mui/icons-material';
 import { DonutLargeOutlined } from '@mui/icons-material';
 import { Avatar, IconButton } from '@mui/material';
-
+import db from './firebaseSetup.js'
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 
 function SideBar() {
+
+    const [rooms,setRooms] = useState([]);
+
+    // db.collection('rooms').onSnapshot(snapshot => (
+    //     setRooms(snapshot.docs.map(doc=>
+    //         ({
+    //             id: doc.id,
+    //             data: doc.data(),
+    //         })
+    //         ))
+    // ))
+
+
+    const fetchData = async ()=>{
+            const data = collection(db, 'rooms');
+            const rooms = await getDocs(data)
+            const roomsList = rooms.docs.map(doc =>({
+                id:doc.id,
+                data:doc.data()
+            })) 
+           
+
+
+
+    }
+
+useEffect(()=>{
+       fetchData();
+    },[])
+
+
   return (
     <div className='sidebar'>
     
@@ -35,6 +67,9 @@ function SideBar() {
     </div> 
     <div className='sidebar_chats'>
         <SidebarChat addNewChat/>
+        {rooms.map(room =>
+        <SidebarChat key={room.id} id={room.id} name={room.data.id}/>
+        )}
     </div>
     </div>
   )
