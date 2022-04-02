@@ -1,8 +1,11 @@
 import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import db from './firebaseSetup'
 import './SidebarChat.css'
+import  collection  from './firebaseSetup'
+import  addDoc  from './firebaseSetup'
 
-function SidebarChat({addNewChat}) {
+function SidebarChat({addNewChat, id,name}) {
 
 const [isSeed, setSeed] = useState('')
 
@@ -17,7 +20,18 @@ const [isSeed, setSeed] = useState('')
         const roomName = prompt("Please enter chat name");
 
         if(roomName){
+          // db.collection('rooms').add({
+          //   name: roomName,
+          // })
 
+          try {
+            const addNewChat = addDoc(collection(db, "rooms"), {
+             name: roomName
+            });
+            console.log("Document written with ID: ", addNewChat.id);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
         }
     }
 
@@ -25,7 +39,7 @@ const [isSeed, setSeed] = useState('')
     <div className='sidebar_chat'> 
         <Avatar src={`https://avatars.dicebear.com/api/micah/${isSeed}.svg`}/>
         <div className='sidebar_chat_info' >
-            <h2>Room name</h2>
+            <h2>{name}</h2>
             <p>Last message</p>
         </div>
     </div>
