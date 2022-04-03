@@ -7,7 +7,7 @@ import { MoreVert } from '@mui/icons-material';
 import { DonutLargeOutlined } from '@mui/icons-material';
 import { Avatar, IconButton } from '@mui/material';
 import db from './firebaseSetup.js'
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { collection, getDocs } from "firebase/firestore"; 
 
 function SideBar() {
 
@@ -16,13 +16,19 @@ function SideBar() {
 
 
     const fetchData = async ()=>{
-            const data = collection(db, 'rooms');
-            const rooms = await getDocs(data)
-            const roomsList = rooms.docs.map(doc =>({
-                id:doc.id,
-                data:doc.data()
-            })) 
+        //     const data = collection(db, 'rooms');
+        //     const rooms = await getDocs(data)
+        //     const roomsList = rooms.docs.map(doc =>({
+        //         id:doc.id,
+        //         data:doc.data()
+        //     })) 
 
+            const rooms = await getDocs(collection(db, "rooms"));
+           const roomsList = rooms.docs.map(doc =>({
+                     id:doc.id,
+                     data:doc.data()
+                })) ;
+                console.log(roomsList);
             setRooms(roomsList);
 
 

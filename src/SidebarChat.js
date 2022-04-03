@@ -2,8 +2,7 @@ import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import db from './firebaseSetup'
 import './SidebarChat.css'
-import  collection  from './firebaseSetup'
-import  addDoc  from './firebaseSetup'
+import { addDoc, collection } from "firebase/firestore"; 
 
 function SidebarChat({addNewChat, id,name}) {
 
@@ -23,15 +22,16 @@ const [isSeed, setSeed] = useState('')
           // db.collection('rooms').add({
           //   name: roomName,
           // })
-
           try {
-            const addNewChat = addDoc(collection(db, "rooms"), {
-             name: roomName
+            const docRef =  addDoc(collection(db, "rooms"), {
+              name: roomName,
             });
-            console.log("Document written with ID: ", addNewChat.id);
+          
+            console.log("Document written with ID: ", docRef.id);
           } catch (e) {
             console.error("Error adding document: ", e);
           }
+         
         }
     }
 
