@@ -2,14 +2,19 @@ import { AttachFile, InsertEmoticon, MoreVert, SearchOutlined } from '@mui/icons
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { Avatar, IconButton } from '@mui/material'
 import React, { useState, useEffect} from 'react'
+import { useParams } from 'react-router-dom';
 import './Chat.css'
+import db from './firebaseSetup';
+import { getDocs, collection } from 'firebase/firestore';
 
 
 const Chat = () => {
 
-    
     const [isSeed, setSeed] = useState('')
     const [userMessage, setUserMessage] = useState('')
+    const {roomId} = useParams();
+    const [roomName, setRoomName] = useState('');
+
 
 
 const sendMessage = (e) =>  {
@@ -21,9 +26,27 @@ const sendMessage = (e) =>  {
 
 console.log(userMessage);
 
+
     useEffect(()=>{
         
-        setSeed(Date())
+        if(roomId){
+            const querySnapshot = getDocs(collection(db, "rooms")).then(
+                querySnapshot.forEach((doc) => {
+                console.log(`${doc.data().name}`);
+})
+
+); 
+
+
+
+            
+        }
+    }, [roomId])
+
+
+    useEffect(()=>{
+        
+        setSeed(Math.floor(Math.random() * 5000))
 
     }, [])
 
