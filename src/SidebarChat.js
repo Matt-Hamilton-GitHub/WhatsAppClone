@@ -2,17 +2,12 @@ import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import db from './firebaseSetup'
 import './SidebarChat.css'
-import { addDoc, collection } from "firebase/firestore"; 
+import  addDoc  from './firebaseSetup'
+import  collection  from './firebaseSetup'
 
 function SidebarChat({addNewChat, id,name}) {
 
 const [isSeed, setSeed] = useState('')
-
-    useEffect(()=>{
-        
-        setSeed(Date())
-
-    }, [])
 
 
     const creatChat = () => {
@@ -34,6 +29,13 @@ const [isSeed, setSeed] = useState('')
          
         }
     }
+
+
+    useEffect(()=>{
+        
+      setSeed(Date())
+
+  }, [])
 
   return !addNewChat ?(
     <div className='sidebar_chat'> 
