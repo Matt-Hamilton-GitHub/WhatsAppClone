@@ -5,41 +5,47 @@ import React, { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import './Chat.css'
 import db from './firebaseSetup';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, collection, doc } from 'firebase/firestore';
 
 
 const Chat = () => {
 
     const [isSeed, setSeed] = useState('')
     const [userMessage, setUserMessage] = useState('')
+    const [allRooms, setAllRooms] = useState([])
     const {roomId} = useParams();
-    const [roomName, setRoomName] = useState('');
+    const [roomName, setRoomName] = useState([]);
+   
 
+    const roomsCollectionRef = collection(db, 'rooms')
+    
+    
 
-
-const sendMessage = (e) =>  {
+    const sendMessage = (e) =>  {
     e.preventDefault();
-
     setUserMessage('')
     
 }
 
-console.log(userMessage);
 
+
+
+const getRooms = async () => {
+
+    const data = await getDocs(roomsCollectionRef);
+    setAllRooms(data.docs.map(room => ({...room.data(), id: room.id}) ))
+    console.table(allRooms);
+    console.log(roomId);
+    setRoomName(allRooms.filter(room => room.id === roomId))
+    console.log(roomName);
+    
+}
 
     useEffect(()=>{
         
-        if(roomId){
-            const querySnapshot = getDocs(collection(db, "rooms")).then(
-                querySnapshot.forEach((doc) => {
-                console.log(`${doc.data().name}`);
-})
-
-); 
-
-
-
-            
+    if(roomId){
+        getRooms();
+       
         }
     }, [roomId])
 
