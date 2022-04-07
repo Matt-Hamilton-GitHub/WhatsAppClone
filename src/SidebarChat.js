@@ -2,8 +2,6 @@ import { Avatar } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import db from './firebaseSetup'
 import './SidebarChat.css'
-import  addDoc  from './firebaseSetup'
-import  collection  from './firebaseSetup'
 import { Link } from 'react-router-dom'
 
 function SidebarChat({addNewChat, id,name}) {
@@ -15,19 +13,9 @@ const [isSeed, setSeed] = useState('')
         const roomName = prompt("Please enter chat name");
 
         if(roomName){
-          // db.collection('rooms').add({
-          //   name: roomName,
-          // })
-          try {
-            const docRef =  addDoc(collection(db, "rooms"), {
-              name: roomName,
-            });
-          
-            console.log("Document written with ID: ", docRef.id);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
-         
+          db.collection('rooms').add({
+            name: roomName,
+          })
         }
     }
 

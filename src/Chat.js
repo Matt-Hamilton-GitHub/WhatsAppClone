@@ -5,48 +5,40 @@ import React, { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import './Chat.css'
 import db from './firebaseSetup';
-import { getDocs, collection, doc } from 'firebase/firestore';
+
 
 
 const Chat = () => {
 
     const [isSeed, setSeed] = useState('')
-    const [userMessage, setUserMessage] = useState('')
-    const [allRooms, setAllRooms] = useState([{name: '',id: ''}])
+    const [userMessage, setUserMessage] = useState([])
     const {roomId} = useParams();
     const [roomName, setRoomName] = useState('');
    
 
-    const roomsCollectionRef = collection(db, 'rooms')
-    
     const sendMessage = (e) =>  {
     e.preventDefault();
     setUserMessage('')
     
     }
 
-
-const getRooms = async () => {
-
-    const data = await getDocs(roomsCollectionRef);
-    setAllRooms(data.docs.map(room => ({...room.data(), id: room.id}) ))
-    setRoomName(data.docs.map(room => ({...room.data(), id: room.id})).filter(room => room.id === roomId))
-}
     
-allRooms.map(room => {console.log(room.id);})
-
 
     useEffect(()=>{   
     if(roomId){
-        getRooms();
+        db.collection('rooms').doc(roomId).onSnapshot(snapshot =>(
+            setRoomName(snapshot.data().name)
+        ))
+
+        db.collection('rooms').doc(roomId)
+        .collection('messages').orderBy('timestamp','asc')
+        .onSnapshot((snapshot) =>(
+         setUserMessage(snapshot.docs.map(doc => doc.data()) 
+        )))
+
+        setSeed(Math.floor(Math.random() * 5000))
         }
     }, [roomId])
-
-
-    useEffect(()=>{
-        setSeed(Math.floor(Math.random() * 5000))
-    }, [])
-
 
 
   return (
@@ -54,7 +46,7 @@ allRooms.map(room => {console.log(room.id);})
         <div className='chat_header'>
         <Avatar src={`https://avatars.dicebear.com/api/micah/${isSeed}.svg`}/>
         <div className='chat_headerInfo'>
-            <h3>{roomName[0].name}</h3>
+            <h3>{roomName}</h3>
             <p> Last seen at ... </p>
         </div>
             <div className='chat_headerRight'>
@@ -71,13 +63,15 @@ allRooms.map(room => {console.log(room.id);})
         </div>
 
         <div className='chat_body'>
-            
+            {userMessage?.map(message =>(
+                <p className={`chat_message ${true && 'chat_reciever'}`} key={message.timestamp}>
+                    <span className='chat_name'>
+                     {message.name}</span>{message.message}
+                    <span className='chat_timestamp'>
+                        {`${new Date(message.timestamp?.toDate()).toUTCString()}`}</span>
+                </p>
+            ))}
 
-            <p className={`chat_message ${true && 'chat_reciever'}`}>
-                <span className='chat_name'>
-                Matt H</span>Hey Guys
-                <span className='chat_timestamp'>{`${new Date().getHours()}:${new Date().getMinutes()}pm`}</span>
-            </p>
 
         </div>
 
