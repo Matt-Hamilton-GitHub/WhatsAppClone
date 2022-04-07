@@ -12,56 +12,49 @@ const Chat = () => {
 
     const [isSeed, setSeed] = useState('')
     const [userMessage, setUserMessage] = useState('')
-    const [allRooms, setAllRooms] = useState([])
+    const [allRooms, setAllRooms] = useState([{name: '',id: ''}])
     const {roomId} = useParams();
-    const [roomName, setRoomName] = useState([]);
+    const [roomName, setRoomName] = useState('');
    
 
     const roomsCollectionRef = collection(db, 'rooms')
     
-    
-
     const sendMessage = (e) =>  {
     e.preventDefault();
     setUserMessage('')
     
-}
-
-
+    }
 
 
 const getRooms = async () => {
 
     const data = await getDocs(roomsCollectionRef);
     setAllRooms(data.docs.map(room => ({...room.data(), id: room.id}) ))
-    console.table(allRooms);
-    console.log(roomId);
-    setRoomName(allRooms.filter(room => room.id === roomId))
-    console.log(roomName);
-    
+    setRoomName(data.docs.map(room => ({...room.data(), id: room.id})).filter(room => room.id === roomId))
 }
+    
+allRooms.map(room => {console.log(room.id);})
 
-    useEffect(()=>{
-        
+
+    useEffect(()=>{   
     if(roomId){
         getRooms();
-       
         }
     }, [roomId])
 
 
     useEffect(()=>{
-        
         setSeed(Math.floor(Math.random() * 5000))
-
     }, [])
+
+
 
   return (
     <div className='chat'>
         <div className='chat_header'>
         <Avatar src={`https://avatars.dicebear.com/api/micah/${isSeed}.svg`}/>
         <div className='chat_headerInfo'>
-            <h3>Room name</h3>
+            <h3>{roomName[0].name}</h3>
             <p> Last seen at ... </p>
         </div>
             <div className='chat_headerRight'>
