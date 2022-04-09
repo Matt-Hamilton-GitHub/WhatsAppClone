@@ -15,15 +15,18 @@
     
 }
 
-.sidebar_serachContainer{
+.sidebar_searchContainer{
     
     display:flex;
     align-items: center;
     background-color: white;
+    border-radius: 15px;
+    width:90%;
+    height: 30px;
 }
 
 
-.sidebar_serachContainer >input{
+.sidebar_searchContainer >input{
     border: none;
     margin-left: 10px;
 }

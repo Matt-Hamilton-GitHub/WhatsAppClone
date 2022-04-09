@@ -5,19 +5,31 @@ import React, { useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import './Chat.css'
 import db from './firebaseSetup';
+import firebase from 'firebase';
+import { useStateValue } from './StateProvider';
 
 
 
 const Chat = () => {
 
     const [isSeed, setSeed] = useState('')
-    const [userMessage, setUserMessage] = useState([])
+    const [userMessage, setUserMessage] = useState('')
+    const [messages, setMessages] = useState([])
     const {roomId} = useParams();
     const [roomName, setRoomName] = useState('');
+    const [{user},dispatch] = useStateValue();
    
 
     const sendMessage = (e) =>  {
     e.preventDefault();
+
+    db.collection('rooms').doc(roomId).collection('messages')
+        .add({
+            message: userMessage,
+            name: user.displayName,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
     setUserMessage('')
     
     }
@@ -33,7 +45,7 @@ const Chat = () => {
         db.collection('rooms').doc(roomId)
         .collection('messages').orderBy('timestamp','asc')
         .onSnapshot((snapshot) =>(
-         setUserMessage(snapshot.docs.map(doc => doc.data()) 
+         setMessages(snapshot.docs.map(doc => doc.data()) 
         )))
 
         setSeed(Math.floor(Math.random() * 5000))
@@ -47,7 +59,7 @@ const Chat = () => {
         <Avatar src={`https://avatars.dicebear.com/api/micah/${isSeed}.svg`}/>
         <div className='chat_headerInfo'>
             <h3>{roomName}</h3>
-            <p> Last seen at ... </p>
+            <p> {new Date(messages[messages.length - 1]?.timestamp?.toDate()).toUTCString()} </p>
         </div>
             <div className='chat_headerRight'>
                 <IconButton>
@@ -63,8 +75,9 @@ const Chat = () => {
         </div>
 
         <div className='chat_body'>
-            {userMessage?.map(message =>(
-                <p className={`chat_message ${true && 'chat_reciever'}`} key={message.timestamp}>
+            {messages.map(message =>(
+                <p className={`chat_message ${message.name === user.displayName 
+                && 'chat_reciever'}`} key={message.timestamp}>
                     <span className='chat_name'>
                      {message.name}</span>{message.message}
                     <span className='chat_timestamp'>

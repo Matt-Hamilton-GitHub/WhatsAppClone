@@ -3,6 +3,7 @@
     padding: 20px;
     cursor: pointer;
     border-bottom:  1px solid #f6f6f6;
+    text-decoration: none;
 }
 
 .sidebar_chat:hover{
@@ -12,8 +13,15 @@
 .sidebar_chat_info > h2{
     font-size: 16px;
     margin-bottom: 8px;
+    color: #333 !important;
 }
 
 .sidebar_chat_info{
     margin-left: 15px;
+  
+}
+
+a{
+    text-decoration: none;
+    color: #333 !important;
 }
